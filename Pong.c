@@ -21,16 +21,16 @@
 //Global Variables
 //----------------
 unsigned char
-playerScores[3] = {0x00, 0x00, 0x00};
+playerScores[3] = {0x00, 0x00, 0x00}; //indexed from 1
 
 unsigned char
-maxScoreIndex;
+maxScoreIndex = 2; //defaults to max score of 3
 
 unsigned char
 board[1][1] = {{}}; //still don't know what to do here
 
 unsigned char
-maxScoreArr[4] = {1, 2, 3, 4};
+maxScoreArr[4] = {1, 2, 3, 4, 5};
 
 //------------------------
 //Main Function Prototypes
