@@ -35,69 +35,6 @@ board[1][1] = {{}}; //still don't know what to do here
 unsigned char
 maxScoreArr[4] = {1, 2, 3, 4, 5};
 
-//------------------------
-//Main Function Prototypes
-//------------------------
-
-/*********************************************************
- * Gets user input for the max score the game should go to
- *
- * @return{unsigned char}
- ********************************************************/
-unsigned char
-getMaxScoreIndex ();
-
-/****************************************************************************
- * Checks to see if either of the players scored. Returns 0 if no one scored,
- * returns 1 or 2 if player 1 or 2 scored respectively
- *
- * @return{unsigned char}
- ***************************************************************************/ 
-unsigned char
-checkScored ();
-
-/**************************************************
- * Increments the score of the player that is given
- *
- * @param{unsigned char} player
- * @return{void}
- *************************************************/
-void
-incrementScore (unsigned char player);
-
-/*********************************************************************
- * Checks to see if the game is over. Returns 0 if not over, 1 if over
- * 
- * @return{unsigned char}
- ********************************************************************/
-unsigned char
-checkGameOver ();
-
-/********************************
- * Displays the board to the OLED
- * 
- * @return{void}
- *******************************/
-void
-displayBoard ();
-
-/*********************************
- * Displays the scores to the OLED
- * 
- * @reutrn{void}
- ********************************/
-void
-displayScore();
-
-/***************************************************************************
- * Resets the game. Resets player positions, play scores, ball position, and
- * gets a new maximum scorefrom getMaxScoreIndex()
- *
- * @return{void}
- **************************************************************************/
-void
-resetGame ();
-
 //------------------
 //Struct Definitions
 //------------------
@@ -213,6 +150,69 @@ resetBall (struct Ball* ball);
 void
 displayBall (struct Ball* ball);
 
+//------------------------
+//Main Function Prototypes
+//------------------------
+
+/*********************************************************
+ * Gets user input for the max score the game should go to
+ *
+ * @return{unsigned char}
+ ********************************************************/
+unsigned char
+getMaxScoreIndex ();
+
+/****************************************************************************
+ * Checks to see if either of the players scored. Returns 0 if no one scored,
+ * returns 1 or 2 if player 1 or 2 scored respectively
+ *
+ * @return{unsigned char}
+ ***************************************************************************/ 
+unsigned char
+checkScored ();
+
+/**************************************************
+ * Increments the score of the player that is given
+ *
+ * @param{unsigned char} player
+ * @return{void}
+ *************************************************/
+void
+incrementScore (unsigned char player);
+
+/*********************************************************************
+ * Checks to see if the game is over. Returns 0 if not over, 1 if over
+ * 
+ * @return{unsigned char}
+ ********************************************************************/
+unsigned char
+checkGameOver ();
+
+/********************************
+ * Displays the board to the OLED
+ * 
+ * @return{void}
+ *******************************/
+void
+displayBoard ();
+
+/*********************************
+ * Displays the scores to the OLED
+ * 
+ * @reutrn{void}
+ ********************************/
+void
+displayScore();
+
+/***************************************************************************
+ * Resets the game. Resets player positions, play scores, ball position, and
+ * gets a new maximum scorefrom getMaxScoreIndex()
+ *
+ * @return{void}
+ **************************************************************************/
+void
+resetGame ();
+
 //----
 //main
 //----
@@ -233,4 +233,4 @@ main (void) {
 //Player Function Implementations
 //-------------------------------
 
-//Pong
+//end Pong.c
