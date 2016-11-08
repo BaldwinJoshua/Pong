@@ -3,9 +3,6 @@
 -char yPos
 -char width
 -char height
-+void Player(char xPos)
-+char getXPos()
-+char getYPos()
 +char checkMove(char direction) //returns 0 for no move, returns 1 for move
                                 //direction 0 for down, 1 for up
 +void move(char direction)      //direction 0 for down, 1 for up
@@ -18,8 +15,6 @@
 -char yPos
 -signed char xVel //negative down, positive up
 -signed char yVel //negative left, positive right
-+void Ball()
-+char getXPos()     //So only have to check one paddle not both
 +char checkMove(char paddleX,
                 char paddleY,
                 char paddleWidth,
