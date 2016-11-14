@@ -40,7 +40,7 @@ maxScoreArr[4] = {1, 2, 3, 4, 5};
 //------------------
 struct
 Player {
-  unsigned char
+  volitile unsigned char
   xPos,
   yPos,
   width,
@@ -49,11 +49,11 @@ Player {
 
 struct
 Ball {
-  unsigned char
+  volitile unsigned char
   xPos,
   yPos;
 
-  signed char
+  volitile signed char
   xVel,
   yVel;
 };//Ball
