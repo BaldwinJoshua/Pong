@@ -72,43 +72,43 @@ ball = Ball();
  * Checks if the player can move in the direction given. Direction 0 is down, 
  * direction 1 is up. Returns 0 if can't move and 1 if can move.
  *
- * @param{char} playerNdx
+ * @param{unsigned char} playerNdx
  * @param{unsigned char} direction
  * @return{unsigned char}
  ***************************************************************************/
 unsigned char
-checkPlayerMove (char playerNdx,
+checkPlayerMove (unsigned char playerNdx,
                  unsigned char direction);
 
 /******************************************************************************
  * Moves the player in the direction given. Direction 0 is down, direction 1 is
  * up.
  * 
- * @param{char} playerNdx
+ * @param{unsigned char} playerNdx
  * @param{unsigned char}
  * @return{void}
  *****************************************************************************/
 void
-movePlayer (char playerNdx,
+movePlayer (unsigned char playerNdx,
             unsigned char direction);
 
 /*********************************************************
  * Sets the players yPos to be in the middle of the screen
  * 
- * @param{char} playerNdx
+ * @param{unsigned char} playerNdx
  * @return{void}
  ********************************************************/
 void
-resetPlayer (char playerNdx);
+resetPlayer (unsigned char playerNdx);
 
 /*********************************
  * Displays the player to the OLED
  * 
- * @param{char} playerNdx
+ * @param{unsigned char} playerNdx
  * @return{void}
  ********************************/
 void
-displayPlayer (char playerNdx);
+displayPlayer (unsigned char playerNdx);
 
 //------------------------
 //Ball Function Prototypes
@@ -119,11 +119,11 @@ displayPlayer (char playerNdx);
  * to calculate new position, e.g. bounces off paddle or wall), returns 1 if can
  * be moved (space is open)
  *
- * @param{char} playerNdx
+ * @param{unsigned char} playerNdx
  * @return{unsigned char}
  ******************************************************************************/
 unsigned char
-checkBallMove (char playerNdx);
+checkBallMove (unsigned char playerNdx);
 
 /************************************
  * Moves the ball to the new position
@@ -174,11 +174,11 @@ checkScored ();
 /**************************************************
  * Increments the score of the player that is given
  *
- * @param{unsigned char} player
+ * @param{unsigned char} playerNdx
  * @return{void}
  *************************************************/
 void
-incrementScore (unsigned char player);
+incrementScore (unsigned char playerNdx);
 
 /*********************************************************************
  * Checks to see if the game is over. Returns 0 if not over, 1 if over
