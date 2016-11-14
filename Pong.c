@@ -20,21 +20,6 @@
 #include <msp430.h>
 #include <cstdlib>
 
-//----------------
-//Global Variables
-//----------------
-unsigned char
-playerScores[3] = {0x00, 0x00, 0x00}; //indexed from 1
-
-unsigned char
-maxScoreIndex = 2; //defaults to max score of 3
-
-unsigned char
-board[1][1] = {{}}; //still don't know what to do here
-
-unsigned char
-maxScoreArr[4] = {1, 2, 3, 4, 5};
-
 //------------------
 //Struct Definitions
 //------------------
@@ -58,6 +43,27 @@ Ball {
   yVel;
 };//Ball
 
+//----------------
+//Global Variables
+//----------------
+unsigned char
+playerScores[3] = {0x00, 0x00, 0x00}; //indexed from 1
+
+unsigned char
+maxScoreIndex = 2; //defaults to max score of 3
+
+unsigned char
+board[1][1] = {{}}; //still don't know what to do here
+
+unsigned char
+maxScoreArr[4] = {1, 2, 3, 4, 5};
+
+Player
+players[2] = Player();
+
+Ball
+ball = Ball();
+
 //--------------------------
 //Player Function Prototypes
 //--------------------------
@@ -66,43 +72,43 @@ Ball {
  * Checks if the player can move in the direction given. Direction 0 is down, 
  * direction 1 is up. Returns 0 if can't move and 1 if can move.
  *
- * @param{struct Player*} player
+ * @param{char} playerNdx
  * @param{unsigned char} direction
  * @return{unsigned char}
  ***************************************************************************/
 unsigned char
-checkPlayerMove (struct Player* player,
+checkPlayerMove (char playerNdx,
                  unsigned char direction);
 
 /******************************************************************************
  * Moves the player in the direction given. Direction 0 is down, direction 1 is
  * up.
  * 
- * @param{struct Player*} player
+ * @param{char} playerNdx
  * @param{unsigned char}
  * @return{void}
  *****************************************************************************/
 void
-movePlayer (struct Player* player,
+movePlayer (char playerNdx,
             unsigned char direction);
 
 /*********************************************************
  * Sets the players yPos to be in the middle of the screen
  * 
- * @param{struct Player*} player
+ * @param{char} playerNdx
  * @return{void}
  ********************************************************/
 void
-resetPlayer (struct Player* player);
+resetPlayer (char playerNdx);
 
 /*********************************
  * Displays the player to the OLED
  * 
- * @param{struct Player*} player
+ * @param{char} playerNdx
  * @return{void}
  ********************************/
 void
-displayPlayer (struct Player* player);
+displayPlayer (char playerNdx);
 
 //------------------------
 //Ball Function Prototypes
@@ -113,42 +119,36 @@ displayPlayer (struct Player* player);
  * to calculate new position, e.g. bounces off paddle or wall), returns 1 if can
  * be moved (space is open)
  *
- * @param{struct Ball*} ball
- * @param{struct Player*} player
+ * @param{char} playerNdx
  * @return{unsigned char}
  ******************************************************************************/
 unsigned char
-checkBallMove (struct Ball* ball,
-               struct Player* player);
+checkBallMove (char playerNdx);
 
 /************************************
  * Moves the ball to the new position
  * 
- * @param{struct Ball*} ball
  * @param{unsigned char} canMove
  * @return{void}
  ***********************************/
 void
-moveBall (struct Ball* ball,
-          unsigned char canMove);
+moveBall (unsigned char canMove);
 
 /******************************************************************************
  * Resets the ball to middle of board. Creates random yPos and random xVel/yVel
  * 
- * @param{struct Ball*} ball
  * @return{void}
  *****************************************************************************/
 void
-resetBall (struct Ball* ball);
+resetBall ();
 
 /*******************************
  * Displays the ball to the OLED
  * 
- * @param{struct Ball*} ball
  * @return{void}
  ******************************/
 void
-displayBall (struct Ball* ball);
+displayBall ();
 
 //------------------------
 //Main Function Prototypes
