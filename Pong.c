@@ -11,7 +11,7 @@
  * Tyler Fricks
  *
  * VERSION:
- * 0.0
+ * 0.1
  *************************************************************************/
 
 //----------
@@ -20,40 +20,25 @@
 #include <msp430.h>
 #include <cstdlib>
 
-//----------------
-//Global Variables
-//----------------
-unsigned char
-playerScores[3] = {0x00, 0x00, 0x00}; //indexed from 1
-
-unsigned char
-maxScoreIndex = 2; //defaults to max score of 3
-
-unsigned char
-board[1][1] = {{'a'}}; //still don't know what to do here
-
-unsigned char
-maxScoreArr[5] = {1, 2, 3, 4, 5};
-
 //------------------
 //Struct Definitions
 //------------------
 struct
 Player {
-  volitile unsigned char
+  volatile unsigned char
   xPos,
   yPos,
-  width,
-  height;
+  width,    //half-width
+  height;   //half-height
 };//Player
 
 struct
 Ball {
-  volitile unsigned char
+  volatile unsigned char
   xPos,
   yPos;
 
-  volitile signed char
+  volatile signed char
   xVel,
   yVel;
 };//Ball
@@ -68,103 +53,28 @@ unsigned char
 maxScoreIndex = 4; //defaults to max score of 5
 
 unsigned char
-board[1][1] = {{}}; //still don't know what to do here
+board[1][1] = {{'a'}}; //still don't know what to do here
 
 unsigned char
 maxScoreArr[5] = {1, 2, 3, 4, 5};
 
-Player
-players[2] = Player();
-
-Ball
-ball = Ball();
-
-//--------------------------
-//Player Function Prototypes
-//--------------------------
-
-/****************************************************************************
- * Checks if the player can move in the direction given. Direction 0 is down,
- * direction 1 is up. Returns 0 if can't move and 1 if can move.
- *
- * @param{unsigned char} playerNdx
- * @param{unsigned char} direction
- * @return{unsigned char}
- ***************************************************************************/
 unsigned char
-checkPlayerMove (unsigned char playerNdx,
-                 unsigned char direction);
+X_MIN = 0;
 
-/******************************************************************************
- * Moves the player in the direction given. Direction 0 is down, direction 1 is
- * up.
- * 
- * @param{unsigned char} playerNdx
- * @param{unsigned char}
- * @return{void}
- *****************************************************************************/
-void
-movePlayer (unsigned char playerNdx,
-            unsigned char direction);
+unsigned char 
+X_MAX = 47;
 
-/*********************************************************
- * Sets the players yPos to be in the middle of the screen
- * 
- * @param{unsigned char} playerNdx
- * @return{void}
- ********************************************************/
-void
-resetPlayer (unsigned char playerNdx);
-
-/*********************************
- * Displays the player to the OLED
- * 
- * @param{unsigned char} playerNdx
- * @return{void}
- ********************************/
-void
-displayPlayer (unsigned char playerNdx);
-
-//------------------------
-//Ball Function Prototypes
-//------------------------
-
-/*******************************************************************************
- * Checks if the ball can be moved. Returns 0 if can't be moved (have to do trig
- * to calculate new position, e.g. bounces off paddle or wall), returns 1 if can
- * be moved (space is open)
- *
- * @param{unsigned char} playerNdx
- * @return{unsigned char}
- ******************************************************************************/
 unsigned char
-checkBallMove (unsigned char playerNdx);
+Y_MIN = 0;
 
-/************************************
- * Moves the ball to the new position. If canMove is 0 has to do trig, if canMove
- * is 1 no trig is required
- *
- * @param{unsigned char} canMove
- * @return{void}
- ***********************************/
-void
-moveBall (unsigned char canMove);
+unsigned char
+Y_MAX = 63;
 
-/******************************************************************************
- * Resets the ball to middle of board. Creates random yPos and random xVel/yVel
- *
- * @return{void}
- *****************************************************************************/
-void
-resetBall ();
+struct Player
+players[2];
 
-/*******************************
- * Displays the ball to the OLED
- *
- * @return{void}
- ******************************/
-void
-displayBall ();
+struct Ball
+ball;
 
 //------------------------
 //Main Function Prototypes
@@ -221,14 +131,76 @@ displayBoard ();
 void
 displayScore();
   
-/***************************************************************************
- * Resets the game. Resets player positions, play scores, ball position, and
- * gets a new maximum scorefrom getMaxScoreIndex()
+/*****************************************************************************
+ * Resets the game. Resets player positions, player scores, ball position, and
+ * gets a new maximum score from getMaxScoreIndex()
  *
  * @return{void}
- **************************************************************************/
+ ****************************************************************************/
 void
 resetGame ();
+
+//------------------------
+//Ball Function Prototypes
+//------------------------
+
+/*************************************
+ * Moves the ball to the new position.
+ *
+ * @return{void}
+ ************************************/
+void
+moveBall ();
+
+/******************************************************************************
+ * Resets the ball to middle of board. Creates random yPos and random xVel/yVel
+ *
+ * @return{void}
+ *****************************************************************************/
+void
+resetBall ();
+
+/*******************************
+ * Displays the ball to the OLED
+ *
+ * @return{void}
+ ******************************/
+void
+displayBall ();
+
+//--------------------------
+//Player Function Prototypes
+//--------------------------
+
+/******************************************************************************
+ * Moves the player in the direction given. Direction 0 is down, direction 1 is
+ * up.
+ * 
+ * @param{unsigned char} playerNdx
+ * @param{unsigned char}
+ * @return{void}
+ *****************************************************************************/
+void
+movePlayer (unsigned char playerNdx,
+            unsigned char direction);
+
+/*********************************************************
+ * Sets the players yPos to be in the middle of the screen
+ * 
+ * @param{unsigned char} playerNdx
+ * @return{void}
+ ********************************************************/
+void
+resetPlayer (unsigned char playerNdx);
+
+/*********************************
+ * Displays the player to the OLED
+ * 
+ * @param{unsigned char} playerNdx
+ * @return{void}
+ ********************************/
+void
+displayPlayer (unsigned char playerNdx);
 
 //----
 //main
@@ -236,6 +208,7 @@ resetGame ();
 int
 main (void) {
 
+  return 0;
 }//main
 
 //-----------------------------
@@ -266,33 +239,47 @@ checkGameOver () {
   }//else
 }//checkGameOver
 
+void
+resetGame () {
+  resetPlayer(0);
+  resetPlayer(1);
+  resetBall();
+  getMaxScoreIndex();
+  playerScores = {0x00, 0x00};
+
+  return;
+}//resetGame
+
 //-----------------------------
 //Ball Function Implementations
 //-----------------------------
 void
-moveBall (unsigned char canMove) {
-  if (canMove) {
-    ball.xPos += ball.xVel;
+moveBall () {
+  if (ball.yPos + ball.yVel > X_MIN && ball.yPos + ball.yVel < X_MAX) {
     ball.yPos += ball.yVel;
   }//if
   else {
-    //trig for ball bouncing
+    ball.yPos = Y_MAX - (ball.yPos + ball.yPos + X_MAX) % Y_MAX;
   }//else
+
+  return;
 }//moveBall
 
 void
 resetBall () {
-  srand((CCRO % 99) + 1);
+  srand(CCR0 % 100);
   
-  ball.xPos = 24;
-  ball.yPos = 0 + rand();
+  ball.xPos = 23;             //counting from 0 default to center of screen
+  ball.yPos = rand() % (Y_MAX - 2) + 1;
   
-  ball.xVel = 0 + rand();
-  if (rand() % 2) {
-    ball.xVel = 1;
+  ball.yVel = rand() % 9 + 1;   //arbitrary max velocity
+  srand(CCR0 % 100);            //so xVel not same as yVel
+  ball.xVel = rand() % 9 + 1;   //arbitrary max velocity
+  if (rand() % 2) {             //sets velocity direction
+    ball.xVel *= 1;
   }//if
   else {
-    ball.xVel = -1;
+    ball.xVel *= -1;
   }//else
   
   return;
@@ -301,22 +288,24 @@ resetBall () {
 //-------------------------------
 //Player Function Implementations
 //-------------------------------
+
 void
 movePlayer (unsigned char playerNdx, 
             unsigned char direction) {
-  if (direction) {
+  if (direction &&
+      players[playerNdx].yPos + 1 + players[playerNdx].height < Y_MAX) {
     players[playerNdx].yPos++;
   }//if
-  else {
+  else if (players[playerNdx].yPos - 1 - players[playerNdx].height > Y_MIN) {
     players[playerNdx].yPos--;
-  }//else
+  }//else if
   
   return;
 }//movePlayer
 
 void
 resetPlayer (unsigned char playerNdx) {
-  players[playerNdx].yPos = 32;
+  players[playerNdx].yPos = 31;   //counting from 0
   
   return;
 }//resetPlayer
