@@ -25,11 +25,7 @@
 //------------------
 struct
 Player {
-<<<<<<< HEAD
-  volitile unsigned char
-=======
   volatile unsigned char
->>>>>>> refs/remotes/origin/Michael-Dev
   xPos,
   yPos,
   width,    //half-width
@@ -38,19 +34,11 @@ Player {
 
 struct
 Ball {
-<<<<<<< HEAD
-  volitile unsigned char
-  xPos,
-  yPos;
-
-  volitile signed char
-=======
   volatile unsigned char
   xPos,
   yPos;
 
   volatile signed char
->>>>>>> refs/remotes/origin/Michael-Dev
   xVel,
   yVel;
 };//Ball
@@ -301,8 +289,6 @@ resetBall () {
 //Player Function Implementations
 //-------------------------------
 
-<<<<<<< HEAD
-=======
 void
 movePlayer (unsigned char playerNdx, 
             unsigned char direction) {
@@ -323,5 +309,4 @@ resetPlayer (unsigned char playerNdx) {
   
   return;
 }//resetPlayer
->>>>>>> refs/remotes/origin/Michael-Dev
 //end Pong.c
