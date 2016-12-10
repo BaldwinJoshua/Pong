@@ -27,7 +27,8 @@ struct
 Player {
 	volatile unsigned char
 	xPos,
-	yPos;
+	yPos,
+	score;
 };//Player
 
 struct
@@ -54,6 +55,8 @@ Ball {
 #define _BV(n)        1 << n
 #define LCD_WIDTH     64
 #define LCD_HEIGHT    48
+#define SCOREY		  0
+#define MAX_SCORE	  7
 
 //----------------
 //Global Variables
@@ -304,6 +307,23 @@ resetPlayer (unsigned char playerNdx);
 void
 setPlayer (unsigned char playerNdx, unsigned char mode);
 
+/*********************************
+ * Draws score for each palyer
+ *
+ * @param{unsigned char} mode
+ * @return{void}
+ ********************************/
+void
+drawScore(unsigned char mode);
+
+/*********************************
+ * Reset score for each palyer
+ *
+ * @return{void}
+ ********************************/
+void
+resetScore();
+
 //-----------------------------
 //Main Function Implementations
 //-----------------------------
@@ -552,7 +572,7 @@ moveBall () {
 	// Y-Axis stuff (floor and ceiling)
 	if (BALL.yPos + BALL.yVel - 1 < Y_MIN ||
 			BALL.yPos + BALL.yVel > Y_MAX) {
-        BALL.yVel *= -1;
+		BALL.yVel *= -1;
 	}//if
 
 	// X-Axis stuff (paddles)
@@ -562,32 +582,43 @@ moveBall () {
 			BALL.xVel *= -1;
 		}// if
 		else{
+			PLAYER_ARRAY[1].score += 1;
+			if(PLAYER_ARRAY[1].score >= MAX_SCORE){
+				drawScore(1);
+				resetScore();
+			}
+
 			resetGame();
 		}// else
 	}// if
 
-  if(BALL.xPos + BALL.xVel >= 62){
+	if(BALL.xPos + BALL.xVel >= 62){
 		if(BALL.yPos < PLAYER_ARRAY[1].yPos + PLAYER_HEIGHT &&
 				BALL.yPos > PLAYER_ARRAY[1].yPos - PLAYER_HEIGHT){
 			BALL.xVel *= -1;
 		}// if
 		else{
+			PLAYER_ARRAY[0].score += 1;
+			if(PLAYER_ARRAY[0].score >= MAX_SCORE){
+				drawScore(1);
+				resetScore();
+			}
 			resetGame();
 		}// else
 	}// if
 
-  BALL.xPos += BALL.xVel;
-  BALL.yPos += BALL.yVel;
+	BALL.xPos += BALL.xVel;
+	BALL.yPos += BALL.yVel;
 
 	return 1;
 }//moveBall
 
 void
 drawBall (unsigned char mode){
-  pixel(BALL.xPos, BALL.yPos, mode);
-  pixel(BALL.xPos, BALL.yPos - 1, mode);
-  pixel(BALL.xPos - 1, BALL.yPos - 1, mode);
-  pixel(BALL.xPos - 1, BALL.yPos, mode);
+	pixel(BALL.xPos, BALL.yPos, mode);
+	pixel(BALL.xPos, BALL.yPos - 1, mode);
+	pixel(BALL.xPos - 1, BALL.yPos - 1, mode);
+	pixel(BALL.xPos - 1, BALL.yPos, mode);
 }// drawBall
 
 void
@@ -645,6 +676,32 @@ setPlayer (unsigned char playerNdx, unsigned char mode) {
 	return;
 }//setPlayer
 
+void
+drawScore(unsigned char mode){
+	unsigned char scoreX = (LCD_WIDTH)/2;
+	volatile unsigned char i;
+
+	for(i = 0; i < PLAYER_ARRAY[0].score; i++)
+	{
+		scoreX -= 3;
+		line(scoreX, SCOREY, scoreX, SCOREY+3,mode);
+	}
+
+	scoreX = (LCD_WIDTH)/2;
+
+	for(i = 0; i < PLAYER_ARRAY[1].score; i++)
+	{
+		scoreX += 3;
+		line(scoreX, SCOREY, scoreX, SCOREY+3,mode);
+	}
+}//drawScore
+
+void
+resetScore(){
+	PLAYER_ARRAY[0].score = 0;
+	PLAYER_ARRAY[1].score = 0;
+}
+
 //----
 //main
 //----
@@ -691,12 +748,13 @@ main (void) {
 				setPlayer(k, 0);
 			}//else if
 		}//for
-    
-    drawBall(1);
-    moveBall();
-    drawBall(0);
+
+		drawBall(1);
+		moveBall();
+		drawBall(0);
 
 		line(LCD_WIDTH/2, 0, LCD_WIDTH/2, LCD_HEIGHT, 0);
+		drawScore(0);
 
 		__delay_cycles(T_DELAY);
 		display();
