@@ -56,7 +56,7 @@ Ball {
 #define LCD_WIDTH     64
 #define LCD_HEIGHT    48
 #define SCOREY		  0
-#define MAX_SCORE	  7
+#define MAX_SCORE	  6
 
 //----------------
 //Global Variables
@@ -582,11 +582,12 @@ moveBall () {
 			BALL.xVel *= -1;
 		}// if
 		else{
-			PLAYER_ARRAY[1].score += 1;
-			if(PLAYER_ARRAY[1].score >= MAX_SCORE){
+			if(PLAYER_ARRAY[1].score > MAX_SCORE){
 				drawScore(1);
 				resetScore();
 			}
+			else
+				PLAYER_ARRAY[1].score += 1;
 
 			resetGame();
 		}// else
@@ -598,11 +599,12 @@ moveBall () {
 			BALL.xVel *= -1;
 		}// if
 		else{
-			PLAYER_ARRAY[0].score += 1;
-			if(PLAYER_ARRAY[0].score >= MAX_SCORE){
+			if(PLAYER_ARRAY[0].score > MAX_SCORE){
 				drawScore(1);
 				resetScore();
 			}
+			else
+				PLAYER_ARRAY[0].score += 1;
 			resetGame();
 		}// else
 	}// if
@@ -628,11 +630,7 @@ resetBall () {
 	BALL.xPos = X_MAX / 2;        //counting from 0 default to center of screen
 	BALL.yPos = rand() % (Y_MAX - 2) + 1;
 
-	BALL.yVel = rand() % 2 + 1;   //arbitrary max velocity
-
 	srand(JOYSTICK_VALUES[1]);            //so xVel not same as yVel
-
-	BALL.xVel = rand() % 2 + 1;   //arbitrary max velocity
 
 	if (!(rand() % 2)) {          //sets velocity direction
 		BALL.xVel *= -1;
@@ -712,8 +710,12 @@ main (void) {
 	P2DIR |= (MOSI + CLOCK + CHIP_SELECT + DATA_COMMAND + RESET);    // 0-MOSI 1-CLOCK 2-CHIP_SELECT
 	P2OUT |= (CHIP_SELECT + DATA_COMMAND + RESET);         // CS initially High
 	P2OUT &= ~(CLOCK + MOSI);     // CLK and MOSI initially low
+	BCSCTL1 = CALBC1_8MHZ;			//OVERCLOCK!!!
 
 	BALL.radius = 1;                  //set ball radius
+	BALL.xVel = 1;					//set ball speeds
+	BALL.yVel = 1;
+
 	resetBall();
 	PLAYER_ARRAY[0].xPos = X_MIN + 1; //set left paddle xPos
 	PLAYER_ARRAY[1].xPos = X_MAX;     //set right paddle xPos
