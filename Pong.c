@@ -11,7 +11,7 @@
  * Tyler Fricks
  *
  * VERSION:
- * 0.1
+ * 1.0
  *************************************************************************/
 
 //----------
@@ -55,8 +55,8 @@ Ball {
 #define _BV(n)        1 << n
 #define LCD_WIDTH     64
 #define LCD_HEIGHT    48
-#define SCOREY		  0
-#define MAX_SCORE	  6
+#define SCORE_YPOS		0
+#define MAX_SCORE	  	6
 
 //----------------
 //Global Variables
@@ -208,8 +208,8 @@ clear ();
  ********************************/
 void
 pixel (char x,
-		char y,
-		unsigned char mode);
+			 char y,
+			 unsigned char mode);
 
 /*********************************
  *
@@ -223,10 +223,10 @@ pixel (char x,
  ********************************/
 void
 line (char x0,
-		char y0,
-		char x1,
-		char y1,
-		unsigned char mode);
+		  char y0,
+		  char x1,
+		  char y1,
+		  unsigned char mode);
 
 /*********************************
  *
@@ -287,7 +287,7 @@ resetBall ();
  *****************************************************************************/
 void
 movePlayer (unsigned char playerNdx,
-		unsigned char direction);
+						unsigned char direction);
 
 /*********************************************************
  * Sets the players yPos to be in the middle of the screen
@@ -305,7 +305,8 @@ resetPlayer (unsigned char playerNdx);
  * @return{void}
  ********************************/
 void
-setPlayer (unsigned char playerNdx, unsigned char mode);
+setPlayer (unsigned char playerNdx,
+					 unsigned char mode);
 
 /*********************************
  * Draws score for each palyer
@@ -405,7 +406,7 @@ send_data (char send) {
 
 void
 display () {
-	char
+	unsigned char
 	i, j;
 
 	for (i = 0; i < 6; i++) {
@@ -421,7 +422,7 @@ display () {
 
 void
 clear () {
-	char
+	unsigned char
 	i, j;
 
 	for (i = 0; i < 6; i++) {
@@ -510,8 +511,8 @@ init () {
 	volatile unsigned char
 	txbuf[24];
 
-	char
-	i = 0;
+	unsigned char
+	txBuffNdx = 0;
 
 	P2OUT &= ~RESET;
 	__delay_cycles(50000);
@@ -541,8 +542,8 @@ init () {
 	txbuf[21] = 0x40;
 	txbuf[22] = 0xAF;
 
-	for(i = 0; i < 23; i++){
-		send_command(txbuf[i]);
+	for(txBuffNdx = 0; txBuffNdx < 23; txBuffNdx++){
+		send_command(txbuf[txBuffNdx]);
 	}//for
 
 	return;
@@ -580,34 +581,37 @@ moveBall () {
 		if(BALL.yPos < PLAYER_ARRAY[0].yPos + PLAYER_HEIGHT &&
 				BALL.yPos > PLAYER_ARRAY[0].yPos - PLAYER_HEIGHT){
 			BALL.xVel *= -1;
-		}// if
+		}//if
 		else{
 			if(PLAYER_ARRAY[1].score > MAX_SCORE){
 				drawScore(1);
 				resetScore();
-			}
-			else
+			}//if
+			else {
 				PLAYER_ARRAY[1].score += 1;
+			}//else
 
 			resetGame();
-		}// else
-	}// if
+		}//else
+	}//if
 
 	if(BALL.xPos + BALL.xVel >= 62){
 		if(BALL.yPos < PLAYER_ARRAY[1].yPos + PLAYER_HEIGHT &&
 				BALL.yPos > PLAYER_ARRAY[1].yPos - PLAYER_HEIGHT){
 			BALL.xVel *= -1;
-		}// if
+		}//if
 		else{
 			if(PLAYER_ARRAY[0].score > MAX_SCORE){
 				drawScore(1);
 				resetScore();
-			}
-			else
+			}//if
+			else {
 				PLAYER_ARRAY[0].score += 1;
+			}//else
+
 			resetGame();
-		}// else
-	}// if
+		}//else
+	}//if
 
 	BALL.xPos += BALL.xVel;
 	BALL.yPos += BALL.yVel;
@@ -675,30 +679,33 @@ setPlayer (unsigned char playerNdx, unsigned char mode) {
 }//setPlayer
 
 void
-drawScore(unsigned char mode){
-	unsigned char scoreX = (LCD_WIDTH)/2;
-	volatile unsigned char i;
+drawScore (unsigned char mode) {
+	unsigned char
+	scoreX = (LCD_WIDTH)/2;
 
-	for(i = 0; i < PLAYER_ARRAY[0].score; i++)
+	volatile unsigned char
+	playerNdx;
+
+	for(playerNdx = 0; playerNdx < PLAYER_ARRAY[0].score; playerNdx++)
 	{
 		scoreX -= 3;
-		line(scoreX, SCOREY, scoreX, SCOREY+3,mode);
-	}
+		line(scoreX, SCORE_YPOS, scoreX, SCORE_YPOS + 3, mode);
+	}//for
 
 	scoreX = (LCD_WIDTH)/2;
 
-	for(i = 0; i < PLAYER_ARRAY[1].score; i++)
+	for(playerNdx = 0; playerNdx < PLAYER_ARRAY[1].score; playerNdx++)
 	{
 		scoreX += 3;
-		line(scoreX, SCOREY, scoreX, SCOREY+3,mode);
-	}
+		line(scoreX, SCORE_YPOS, scoreX, SCORE_YPOS + 3, mode);
+	}//for
 }//drawScore
 
 void
-resetScore(){
+resetScore () {
 	PLAYER_ARRAY[0].score = 0;
 	PLAYER_ARRAY[1].score = 0;
-}
+}//resetScore
 
 //----
 //main
