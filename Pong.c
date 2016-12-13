@@ -36,7 +36,6 @@ Ball {
 	volatile unsigned char
 	xPos,
 	yPos,
-	radius;   //makes a 3x3 ball cube
 
 	volatile signed char
 	xVel,
@@ -719,7 +718,6 @@ main (void) {
 	P2OUT &= ~(CLOCK + MOSI);     // CLK and MOSI initially low
 	BCSCTL1 = CALBC1_8MHZ;			//OVERCLOCK!!!
 
-	BALL.radius = 1;                  //set ball radius
 	BALL.xVel = 1;					//set ball speeds
 	BALL.yVel = 1;
 
