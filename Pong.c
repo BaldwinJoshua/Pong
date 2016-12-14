@@ -35,7 +35,7 @@ struct
 Ball {
 	volatile unsigned char
 	xPos,
-	yPos,
+	yPos;
 
 	volatile signed char
 	xVel,
